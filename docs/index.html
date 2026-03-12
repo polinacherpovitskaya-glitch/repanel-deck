@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RePanel — Инвестиционная презентация 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: -apple-system, sans-serif; overflow: hidden; height: 100vh; }
+  .container { display: flex; flex-direction: column; height: 100vh; }
+  .slide-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .slide-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 16px; background: #1a1a1a; }
+  .controls button {
+    background: #333; color: #fff; border: none; border-radius: 8px;
+    padding: 10px 24px; font-size: 15px; cursor: pointer; transition: background 0.2s;
+  }
+  .controls button:hover { background: #555; }
+  .controls button:disabled { opacity: 0.3; cursor: default; }
+  .counter { color: #888; font-size: 14px; min-width: 60px; text-align: center; }
+  .dots { display: flex; gap: 8px; }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #444;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .dot.active { background: #fff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="slide-wrapper">
+    <img id="slide" src="" alt="Slide">
+  </div>
+  <div class="controls">
+    <button id="prev" onclick="go(-1)">&larr; Назад</button>
+    <div class="dots" id="dots"></div>
+    <span class="counter" id="counter"></span>
+    <button id="next" onclick="go(1)">Далее &rarr;</button>
+  </div>
+</div>
+<script>
+const slides = [
+  { src: 'slides/nDkRz.png', title: '01 — Титульный' },
+  { src: 'slides/q4Lrj.png', title: '02 — Проблема и решение' },
+  { src: 'slides/yx1UX.png', title: '03 — Решение' },
+  { src: 'slides/SvcO7.png', title: '04 — Материал' },
+];
+let current = 0;
+const img = document.getElementById('slide');
+const counter = document.getElementById('counter');
+const dotsEl = document.getElementById('dots');
+
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  d.onclick = () => { current = i; render(); };
+  dotsEl.appendChild(d);
+});
+
+function render() {
+  img.src = slides[current].src;
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  document.getElementById('prev').disabled = current === 0;
+  document.getElementById('next').disabled = current === slides.length - 1;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+}
+
+function go(dir) {
+  current = Math.max(0, Math.min(slides.length - 1, current + dir));
+  render();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+
+render();
+</script>
+</body>
+</html>
