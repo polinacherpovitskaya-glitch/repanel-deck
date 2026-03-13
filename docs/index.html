@@ -73,8 +73,9 @@ slides.forEach((_, i) => {
   dotsEl.appendChild(d);
 });
 
+const v = '20260313b';
 function render() {
-  img.src = slides[current].src;
+  img.src = slides[current].src + '?v=' + v;
   counter.textContent = (current + 1) + ' / ' + slides.length;
   document.getElementById('prev').disabled = current === 0;
   document.getElementById('next').disabled = current === slides.length - 1;
